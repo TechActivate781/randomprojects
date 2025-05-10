@@ -1,2 +1,2 @@
 # randomprojects
-Random projects that I am making in my C roadmap
+Random projects that I've made while learning C
