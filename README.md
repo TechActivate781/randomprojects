@@ -1,7 +1,7 @@
 # randomprojects
 Random projects that I've made while learning C
 
-## What winOS
+## whatWinOS
 An app that finds out what Windows version is being used. Supported on Windows XP+ and Windows Server 2008+
 
 
