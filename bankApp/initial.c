@@ -1,38 +1,84 @@
-// random stuff for now - haven't had the time to work on thsi for idk how long
-
 #include <stdio.h>
-#include <windows.h>
 #include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <ctype.h>
-#include <stdbool.h>
-#include <errno.h>
+#include <time.h>
+#include <windows.h>
+//3:53:46
+// messing with prototyping
 
-void shift(char pass[10]){
-    // later
-}
+void CheckBalance(float balance);
+float DepositMoney(float deposit, float balance);
+float WithdrawMoney(float amount, float balance);
+float GenerateMoney();
 
 int main(){
-    char test[10] = "abcd";
-    char alpha[26] = "abcdefghijklmnopqrstuvwxyz";
-    char alphawiththree[26] = "defghijklmnopqrstuvwxyzabc";
+    srand(time(NULL));
+    system("cls");
+    float balance = GenerateMoney();
+    int option = 0;
+    do{
+        printf("Welcome\nType 1 to check balance\nType 2 to deposit money\nType 3 to withdraw money\nType 4 to exit\n");
+        scanf("%d", &option);
 
-    char pass[20] = "TheTest";
-    strlwr(pass);
-
-    int length = strlen(pass);
-
-   for(int i = 0; i < 26; i++){
-    for(int j = 0; j < length; j++){
-        if(pass[j] == alpha[i]){
-            pass[j] = alphawiththree[i];
+        if(option == 1){
+            CheckBalance(balance);
             break;
         }
-    }
-   }
 
-    printf("%s\n", pass);
+        else if(option == 2){
+            printf("How much money would you like to deposit?\n");
+            int depositAmount;
+            scanf("%d", &depositAmount);
+            balance = DepositMoney(depositAmount, balance);
+            printf("Your new balance is $%f\n", balance);
+            break;
+        }
 
+        else if(option == 3){
+            printf("How much money would you like to withdraw?\n");
+            int withdrawAmount;
+            scanf("%d", &withdrawAmount);
+            if(withdrawAmount > balance){
+                printf("You are trying to withdraw more money than you have\nCurrent Balance:$%f", balance);
+                break;
+            }
+            balance = WithdrawMoney(withdrawAmount, balance);
+            printf("Your new balance is $%f\n", balance);
+            break;
+        }
 
-}   
+        else if(option == 4){
+            printf("Exiting\n");
+            break;
+        }
+
+        else{
+            printf("No valid user option detected; exiting\n");
+            break;
+        }
+
+    }while(option >= 1 && option <= 4);
+
+    printf("Thank you for using our banking app\n");
+        system("pause");
+        return 0;
+}
+
+void CheckBalance(float balance){
+    printf("Your balance is $%f\n", balance);
+}
+
+float DepositMoney(float deposit, float balance){
+    int newMoney = deposit + balance;
+    return newMoney;
+}
+
+float WithdrawMoney(float amount, float balance){
+    int newMoney = balance - amount;
+    return newMoney;
+}
+
+float GenerateMoney(){
+    int max = 10000;
+    int min = 100;
+    return (rand() % (max - min + 1)) + min;
+}
