@@ -11,3 +11,6 @@ A banking app that is currently in progress and doesn't work as of now
 
 ## PRNG-Guesser
 An app that has a PRNG (Pseudo Random Number Generator) to generate a number, which the user will attempt to guess.
+
+## Rock-Paper-Scissors
+A simple game of rock, paper, and scissors
