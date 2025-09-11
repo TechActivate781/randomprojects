@@ -105,6 +105,11 @@ int main(){
             case 5:
             choice = 100;
             break;
+
+            default:
+            printf("No valid user input detected\n");
+            choice = 100;
+            break;
         }
     } while(choice != 100);
 
