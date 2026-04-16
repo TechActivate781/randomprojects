@@ -4,7 +4,7 @@ Random projects that I've made while learning C
 ### CLITimer
 A simple timer that takes the user's input and makes a sound when the timer is finished. This was the first app I made in C
 
-## CLIStopwatch
+### CLIStopwatch
 A stopwatch that can't stop after starting, which I made after the CLITimer. Only one version was released
 
 ### whatWinOS
