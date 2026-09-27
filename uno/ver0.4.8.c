@@ -33,6 +33,7 @@ int main(){//this is like the tenth time i've redone this whole project.
     int Turn = 0; // this assigns who's turn it is. since the computer plays first, its now the user's turn. 1 = comp, 0 = user
     int CurrentCard[2] = {0}; // the first value is the card, then the color
     int ChangeColor; //this will hold the value ofr the color that you're changing the color to
+    int ChosenCards[2] = {0, 0}; // moving this up so that we can use it earlier
 
     int Test;
     Test = 0;
@@ -47,6 +48,7 @@ int main(){//this is like the tenth time i've redone this whole project.
     }
 
     Interpreter(ComCards, Amounts[1], 1000, 0, 0); // just a quick test
+    
     
     int CardToPlay = ChooseComputerTurn(ComCards, Amounts, CurrentCard, 1);    
     CurrentCard[0] = ComCards[CardToPlay - 1][0];
@@ -63,7 +65,7 @@ int main(){//this is like the tenth time i've redone this whole project.
 
     int TurnToPlay; // turn for player
     int IsCardRight = 0; // will be one once we see if the card is correct
-    int ChosenCards[2] = {0, 0};
+    
 
     while(Amounts[0] != 0 || Amounts[1] != 0){
         Interpreter(PlayerCards, Amounts[0], 1000, 1, CurrentCard);
