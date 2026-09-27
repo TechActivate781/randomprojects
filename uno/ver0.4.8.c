@@ -100,6 +100,16 @@ int main(){//this is like the tenth time i've redone this whole project.
         FixCards(ComCards, Amounts[1]);
         MiddlePerson(1, PlayerCards, ComCards, Amounts, CurrentCard, ChosenCards, Turn);
     }
+
+    if(Amounts[0] == 0){
+        printf("Congratulations! You won!!\n");
+        return 0;
+    }
+
+    if(Amounts[1] == 0){
+        printf("The computer has won\n");
+        return 0;
+    }
 }
 
 void MiddlePerson(int Cop, int PlayerCards[100][2], int ComCards[100][2], int Amounts[2], int CurrentCard[2], int ChosenCards[2], int Turn){
