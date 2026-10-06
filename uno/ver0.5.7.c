@@ -243,6 +243,7 @@ int main() { //this is like the tenth time i've redone this whole project.
 			PlayerCards[CardToPlay][1] = 0;
 			FixCards(PlayerCards, Amounts[0]);
 			TurnNum++;
+			Turn = 1; // now teh computer's turn, same reason for putting this above as Turn = 0;
 			MiddlePerson(0, PlayerCards, ComCards, Amounts, CurrentCard, ChosenCards, pTurn);
 			if(LogOrNot == true) {
 				FILE *Log = fopen("log.txt", "a");
@@ -250,7 +251,6 @@ int main() { //this is like the tenth time i've redone this whole project.
 				fclose(Log);
 			}
 
-        	Turn = 1; // now teh computer's turn
         	IsCardRight = 0; // this must be put to zero so that the correct loop will run again.
 
 			if(Amounts[0] == 0) {
@@ -271,13 +271,13 @@ int main() { //this is like the tenth time i've redone this whole project.
 			ComCards[CardToPlay - 1][1] = 0;
 			FixCards(ComCards, Amounts[1]);
 			TurnNum++;
+			Turn = 0; // really, this should be above. because then if MiddlePerson modified it.. it'll be overwritten? lol? 
 			MiddlePerson(1, PlayerCards, ComCards, Amounts, CurrentCard, ChosenCards, pTurn);
 			if(LogOrNot == true) {
 				FILE *Log = fopen("log.txt", "a");
 				Logging(Log, PlayerCards, ComCards, Amounts, CurrentCard, Turn, TurnNum);
 				fclose(Log);
 			}
-			Turn = 0;
 		}
 	}
 
@@ -581,13 +581,12 @@ int ChooseComputerTurn(int Cards[100][2], int Amounts[2], int CurrentCard[2], in
 		return rand() % (7 - 1 + 1) + 1;
 	}
 
-	/*int TotalColors[6] = {0}; // if the 0th index is zero, we have no cards that odn't have a color. if the 1st index is 5, we have 5 red cards, etc. now to fill these...
+	int TotalColors[6] = {0}; // if the 0th index is zero, we have no cards that odn't have a color. if the 1st index is 5, we have 5 red cards, etc. now to fill these...
 	int TotalCards[15] = {0};
 
 	// honestly, before i start working on this, fairly vital to make the move to structs. actually no, because that's tedious and for when im more tired.
 
 	int Temp = 0;
-	printf("helllllllllooooooooooooooooooooooooooooo\n\n\n\n\n");
 	for(int i = 0; i < Amounts[1]; i++){
 		Temp = Cards[i][0];
 		TotalCards[Temp]++;
@@ -601,7 +600,8 @@ int ChooseComputerTurn(int Cards[100][2], int Amounts[2], int CurrentCard[2], in
 	printf("\n\n");
 	for(int i = 0; i < 5; i++){
 		printf("%d", TotalColors[i]);
-	} this is my version of ifdef lol, not really, but i suppose we don't want this code happening on release versions*/
+	} 
+	printf("\n");
 	
 
 	// 1. change colors often.. i suppose we do that.
