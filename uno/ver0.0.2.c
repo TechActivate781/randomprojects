@@ -130,7 +130,7 @@ void interpreter(int cards[100], int color[100], int size){
 }
 
 int main(){
-    int cards[100] = {0}; // fuck you if you have > 100 cards + only 400 bytes soo....
+    int cards[100] = {0}; // not good if you have > 100 cards + only 400 bytes soo....
     int color[100] = {0};
     int acards = giveCards(cards, color);
     for(int i = 0; i < acards; i++){
