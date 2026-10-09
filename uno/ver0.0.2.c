@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <string.h>
 
-// this is probably shit code lol
+// this is probably bad code lol
 
 int giveCards(int intforcards[100], int colora[100]){
     int num = 7;
