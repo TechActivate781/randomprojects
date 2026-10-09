@@ -22,7 +22,7 @@ void giveCards(int intforcards[100], int color[100]){
 }
 
 int main(){
-    int cards[100] = {0}; // fuck you if you have > 100 cards + only 400 bytes soo....
+    int cards[100] = {0}; // not good if you have > 100 cards + only 400 bytes soo....
     int color[100] = {0};
     giveCards(cards, color);
     for(int i = 0; i < 7; i++){
