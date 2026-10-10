@@ -127,8 +127,22 @@ int main() {
 	}
 
 	if(LogOrNotInInt == 1){
-		FILE *Log = fopen("log.txt", "w");
-		fclose(Log); // just writing to the file if they want us to overwrite a previous log.txt
+		FILE *pLog = fopen("log.txt", "w");
+		if(pLog == NULL){
+			perror("Error opening file: ");
+		}
+		return 1; // really, if it opens fine once, it should be fine all the time.
+		fclose(pLog); // just writing to the file if they want us to overwrite a previous log.txt
+	}
+
+	if(LogOrNotInInt == 0){
+		// just for testing.
+		FILE *pLog = fopen("log.txt", "a");
+		if(pLog == NULL){
+			perror("Error opening file: ");
+		}
+		return 1;
+		fclose(pLog); 
 	}
 
 	srand(time(NULL));
