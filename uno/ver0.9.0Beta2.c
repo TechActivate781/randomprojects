@@ -1,3 +1,11 @@
+/*changelog:
+1. the structs actually update now :sob:
+2. some updates to how the computer play's the card
+3. numbers are added to the card number so its easier to play
+4. player v player mode, although very buggy as it's early
+5. many bugfixes
+6. special cards when played from plus4/wild actually have an effect now…*/
+
 /* todo:
 short term things:
 =move the change of turns to the middleperson.. [done by moving Turn = x above middleperson]
@@ -130,8 +138,8 @@ int main() {
 		FILE *pLog = fopen("log.txt", "w");
 		if(pLog == NULL){
 			perror("Error opening file: ");
+			return 1; // really, if it opens fine once, it should be fine all the time.
 		}
-		return 1; // really, if it opens fine once, it should be fine all the time.
 		fclose(pLog); // just writing to the file if they want us to overwrite a previous log.txt
 	}
 
@@ -140,8 +148,8 @@ int main() {
 		FILE *pLog = fopen("log.txt", "a");
 		if(pLog == NULL){
 			perror("Error opening file: ");
+			return 1; // really, if it opens fine once, it should be fine all the time.
 		}
-		return 1;
 		fclose(pLog); 
 	}
 
