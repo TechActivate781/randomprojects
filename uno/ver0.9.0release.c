@@ -1,16 +1,3 @@
-/*changelog:
-1. givecard() has been overhauled and now gives cards based on the probability in real uno
-2. logerr() has been added in case smth goes wrong
-3. player can now play two/more cards at once
-4. log made is now unoLog.txt to prevent accidentally overwriting/appending to an existing file.
-5. player v player has been removed temp, its honestly just a buggy mess and i'll readd it when it isn't complete and total garbage.
-6. computer turn is now decided by a set of rules, it sees what legal card scores the highest points and plays that.
-7. computer can play multiple cards at once
-8. one second breaks in between turns to slow things down and make the user keep up with it
-9. the card the computer plays is now clearly shown.
-10. here's something funny, this version marks the first time that a game finished. prior, it'd either get stuck or i'd have to quit because i'd end up with 20-30 cards. this no longer happens as computer/player can play more than one at once
-*/
-
 /* todo:
 reduce the whole point of main() - it's too large, put more things in different functions.
 
@@ -141,11 +128,35 @@ int main() {
 		return 0;
 	}
 
+	printf("Would you like to have a game where two computer opponents play against each other? Type 1 for yes, 0 for no: ");
+	int TwoComputersPlaying = ValidateFTInput();
+
 	/*int ComCards[100][2] = {{0}, {0}};
 	int PlayerCards[100][2] = {{0}, {0}}; 
 	int Amounts[2] = {0, 0}; // this is amount of cards the user/computer have; 1 is for computer, 0 is for user. 
 
 	THIS IS THE PREVIOUS VERSION OF IT, KEEPING FOR NO REAL REASON*/
+
+	if(TwoComputersPlaying == 1){
+		printf("Note. In this game mode, you are expected to read the values from the generated unoLog to see what happened\n");
+	}
+
+	printf("For a currently unknown reason, the application gets stuck at times. Giving it under 20 seconds should be fine.\n");
+
+	printf("Game is starting in ");
+	for(int i = 5; i > 0; i--){
+		printf("%d... ", i);
+		sleep(1);
+	}
+	printf("\n");
+
+	#ifdef _WIN32
+		system("cls");
+	#endif
+
+	#ifdef __linux__
+		system("clear");
+	#endif
 
 	Hand Player = {0};
 	Hand Computer = {0};
@@ -162,15 +173,18 @@ int main() {
 		fprintf(Log, "UNO v%s; Developed by techactivate781~ :3. System date and time: %s", Version, ctime(&TimeAndDate));
 		fprintf(Log, "Current Operating System: %s \n", OS);
 		fprintf(Log, "Please do not cheat by reading the values of the computer.\n");
-		fprintf(Log, "NOTE: If you are two players playing against each other, treat Computer values like the 2nd player's\n\n");
 		fprintf(Log, "<----- Starting uno session; preparing game ----->\n");
 		fprintf(Log, "Making the move to using structs [DONE]\n"); // lol
 		if(TwoPlayersPlaying == 1){
 		    fprintf(Log, "[NOTE] Two Player mode chosen\n");
 		    fprintf(Log, "[NOTE] Player vs Player mode. Expect bugs.\n");
 		}
-		if(TwoPlayersPlaying == 0){
+		if(TwoPlayersPlaying == 0 && TwoComputersPlaying == 0){
 		    fprintf(Log, "[NOTE] Computer vs Player mode chosen\n");
+		}
+		if(TwoComputersPlaying == 1){
+		    fprintf(Log, "[NOTE] Computer vs Computer mode chosen\n");
+			fprintf(Log, "[NOTE] This game mode is still in alpha. Expect bugs. Treat all player values as those of the computer.\n");
 		}
 		fprintf(Log, "Creating the hands for the player and computer [DONE]\n");
 		fprintf(Log, "Creating Turn, Amounts, CurrentCard, ChangeColor, ChosenColor, and TurnNum variables [DONE]\n");
@@ -191,15 +205,6 @@ int main() {
 		Player.Amount++;
 		Player.Cards[i][1] = GiveColor(Player.Cards[i][0]);
 	}
-
-	Player.Cards[0][0] = 14;
-	Player.Cards[0][1] = 0;
-	Player.Cards[1][0] = 11;
-	Player.Cards[1][1] = 2;
-	Player.Cards[2][0] = 10;
-	Player.Cards[2][1] = 2;
-	Player.Cards[3][0] = 7;
-	Player.Cards[3][1] = 2;
 
 	int TurnToPlay; // turn for player
 	int IsCardRight = 0; // will be one once we see if the card is correct
@@ -238,10 +243,7 @@ int main() {
 	}
 
 	while(Player.Amount != 0 && Computer.Amount != 0) {
-		if(Turn == 0){
-			if(TwoPlayersPlaying == 1){
-				printf("Player zero's turn\n");
-			}
+		if(Turn == 0 && TwoComputersPlaying == 0){
 			// by doing it in a if, if it becomes the user's turn again, it'll make sure that it asks the user
 			if(counter == 4){
 				counter = 0; // to reset the counter
@@ -291,6 +293,29 @@ int main() {
 				if(CardToPlay == 1003){
 					LogErr(3); // look. if you have 1000 cards, just end the game bruh. this will allow me to test errors
 				}
+
+				if(CardToPlay == 998){
+					// just to clear.
+					printf("Clearing in ");
+					for(int i = 3; i > 0; i--){
+						printf("%d... ", i);
+						sleep(1);
+					}
+					printf("\n");
+
+					#ifdef _WIN32
+					system("cls");
+					#endif
+
+					#ifdef __linux__
+					system("clear");
+					#endif
+
+					printf("Done. Play a turn now. ");
+					Interpreter(Player, 1000, 1, CurrentCard);
+					continue;
+				}
+
 				if(CardToPlay == 999){
 					// this is just to create a log right here and now.
 					if(LogOrNot == true){
@@ -349,14 +374,46 @@ int main() {
 			}
 		}
 
-		if(Turn == 1 && TwoPlayersPlaying == 0){
-			CardToPlay = ChooseComputerTurn(Computer.Cards, &Computer.Amount, CurrentCard, 0, 0, ResultOfAnalyze, Computer);
+		if(Turn == 0 && TwoComputersPlaying == 1){
+			CardToPlay = ChooseComputerTurn(Player.Cards, &Player.Amount, CurrentCard, 0, 0, 0, Player);
+			CurrentCard[0] = Player.Cards[CardToPlay][0];
+			CurrentCard[1] = Player.Cards[CardToPlay][1];
+        	ChosenCards[0] = CurrentCard[0];
+        	ChosenCards[1] = CurrentCard[1];
+			//sleep(1);
+			printf("The computer (opponent one) played this card: ");
+			Interpreter(Player, CardToPlay, 0, 0);
+			Player.Amount--;
+			Player.Cards[CardToPlay][0] = 0;
+			Player.Cards[CardToPlay][1] = 0;
+			FixCardsOld(Player.Cards, Player.Amount);
+			TurnNum++;
+			Turn = 0; // moved above middleperson so it doesn't overwrite any changes done to it from middleperson
+			MiddlePerson(1, &Computer, &Player, CurrentCard, ChosenCards, pTurn, ResultOfAnalyze);
+			if(MultipleCardsPerTurn(ChosenCards, &Player) != 0 || MultipleColorsPerTurn(ChosenCards, &Player) != 0){
+				MultipleCardsForComputer(CurrentCard, &Player, 0, &Player, pTurn, ResultOfAnalyze);
+			}
+			if(LogOrNot == true) {
+				FILE *Log = fopen("unoLog.txt", "a");
+				Logging(Log, Player, Computer, CurrentCard, Turn, TurnNum, ResultOfAnalyze, LastFourCards);
+				fclose(Log);
+			}
+		}
+
+		if(Turn == 1){
+			CardToPlay = ChooseComputerTurn(Computer.Cards, &Computer.Amount, CurrentCard, 0, 0, 0, Computer);
 			CurrentCard[0] = Computer.Cards[CardToPlay][0];
 			CurrentCard[1] = Computer.Cards[CardToPlay][1];
         	ChosenCards[0] = CurrentCard[0];
         	ChosenCards[1] = CurrentCard[1];
-			sleep(1);
-			printf("The computer played this card: ");
+			//sleep(1);
+			if(TwoComputersPlaying == 0){
+				printf("The computer played this card: ");
+			}
+			if(TwoComputersPlaying == 1){
+				printf("The computer (player two) played this card: ");
+			}
+			
 			Interpreter(Computer, CardToPlay, 0, 0);
 			Computer.Amount--;
 			Computer.Cards[CardToPlay][0] = 0;
@@ -444,11 +501,11 @@ int TestHeuristic(int LastFourCards[4][2], int LastThreeAmounts[3], int CurrentC
         }
         
         if(CurrentCard[0] != CloneOfHand.Cards[i][0]){
-            HeuristicValues[i]+=2; // if its legal that we can change card, +1
+            HeuristicValues[i]+=2; // if its legal that we can change card, +2
         }
         
         if(CurrentCard[1] != CloneOfHand.Cards[i][1]){
-            HeuristicValues[i]+=2; // if its legal that we can change color, +1
+            HeuristicValues[i]+=2; // if its legal that we can change color, +2
 			if(Analyze == 1){
 				HeuristicValues[i]++; // if it matches w/ strat, another +1
 			}	
@@ -457,7 +514,7 @@ int TestHeuristic(int LastFourCards[4][2], int LastThreeAmounts[3], int CurrentC
         int temp;
         temp = CloneOfHand.Cards[i][0];
         if(NumOfAllColors[temp] == 1){
-            HeuristicValues[i]+=3; // if its just one card of a color left, we'll do higher thing to get rid of it
+            HeuristicValues[i]+=2; // if its just one card of a color left, we'll do higher thing to get rid of it
         }
         
         temp = CloneOfHand.Cards[i][1];
@@ -475,8 +532,8 @@ int TestHeuristic(int LastFourCards[4][2], int LastThreeAmounts[3], int CurrentC
         if(NumOfAllCards[temp] == 1 && NumOfPlus4OrWild == 0){
 			temp = CloneOfHand.Cards[i][1];
 			if(NumOfAllColors[temp] == 0){
-				// if there's only one other card, or less, that has the color of the card we're playing, and no plus4/change color, we're going w/ -4
-				HeuristicValues[i]-=4;
+				// if there's only one other card, or less, that has the color of the card we're playing, and no plus4/change color, we're going w/ -3
+				HeuristicValues[i]-=3;
 			}
         }
 
@@ -544,7 +601,7 @@ int TestHeuristic(int LastFourCards[4][2], int LastThreeAmounts[3], int CurrentC
 		Answer = -10;
 		// return only card w/ the card stored in ValueOfColorOrCard
 		for(int i = 0; i < CloneOfHand.Amount; i++){
-			if(HeuristicValues[i] > Answer && ValueOfColorOrCard == CloneOfHand.Cards[i][0]){
+			if(HeuristicValues[i] > Answer && ValueOfColorOrCard == CloneOfHand.Cards[i][0] && HeuristicValues[i] != 119){
 				Answer = HeuristicValues[i];
 				CardAnswer = i;
 			}
@@ -564,7 +621,7 @@ int TestHeuristic(int LastFourCards[4][2], int LastThreeAmounts[3], int CurrentC
 		Answer = -10;
 		// return only card w/ the card stored in ValueOfColorOrCard
 		for(int i = 0; i < CloneOfHand.Amount; i++){
-			if(HeuristicValues[i] > Answer && ValueOfColorOrCard == CloneOfHand.Cards[i][1]){
+			if(HeuristicValues[i] > Answer && ValueOfColorOrCard == CloneOfHand.Cards[i][1] && HeuristicValues[i] != 119){
 				Answer = HeuristicValues[i];
 				CardAnswer = i;
 			}
@@ -698,14 +755,20 @@ void MultipleCardsForComputer(int CurrentCard[2], Hand *Computer, int LastFourCa
 
 	int CardToPlay;
 	int CanCardsBePlayed = 1;
+
+	if(CurrentCard[0] == 12 || CurrentCard[0] == 11 || CurrentCard[0] == 10){
+		// if its a special card, play.. same card/color?
+
+	}
 	
 	while(CanCardsBePlayed == 1){
 		if(ColorOrCard == 0){
-			int CardToPlay = TestHeuristic(0, 0, CurrentCard, Temp, Analyze, 1, 1, OriginalCards[0]);
+			CardToPlay = TestHeuristic(0, 0, CurrentCard, Temp, Analyze, 1, 1, OriginalCards[0]);
+
 		}
 
 		if(ColorOrCard == 1){
-			int CardToPlay = TestHeuristic(0, 0, CurrentCard, Temp, Analyze, 1, 2, OriginalCards[1]);
+			CardToPlay = TestHeuristic(0, 0, CurrentCard, Temp, Analyze, 1, 2, OriginalCards[1]);
 		}
 
 		if(CardToPlay == 123){
@@ -780,7 +843,7 @@ void MultipleCards(int CurrentCard[2], Hand *User, int LastFourCards[4][2], Hand
 				}
 
 				if(ColorOrCard == 1 && ChosenCardsToPlay[1] != OriginalCards[1]){
-					printf("Redo. You chose to keep the card the same first time around, do the same here\n");
+					printf("Redo. You chose to keep the color the same first time around, do the same here\n");
 					goto AfterInterpreter;
 				}
 
@@ -812,7 +875,7 @@ void MultipleCards(int CurrentCard[2], Hand *User, int LastFourCards[4][2], Hand
 					}
 			}
 			if(ColorOrCard == 0){
-				sleep(1);
+				//sleep(1);
 				if(MultipleCardsPerTurn(OriginalCards, &Temp) == 0){
 					printf("No more cards can be played.\n");
 					return;
@@ -821,7 +884,7 @@ void MultipleCards(int CurrentCard[2], Hand *User, int LastFourCards[4][2], Hand
 
 			if(ColorOrCard == 1){
 				if(MultipleColorsPerTurn(OriginalCards, &Temp) == 0){
-					sleep(1);
+					//sleep(1);
 					printf("No more cards can be played.\n");
 					return;
 				}
@@ -829,14 +892,14 @@ void MultipleCards(int CurrentCard[2], Hand *User, int LastFourCards[4][2], Hand
 
 			if(ColorOrCard == 2){
 				if(MultipleCardsPerTurn(OriginalCards, &Temp) == 0 && MultipleColorsPerTurn(OriginalCards, &Temp) == 0){
-					sleep(1);
+					//sleep(1);
 					printf("No more cards can be played.\n");
 					return;
 				}
 			}
 
 			if(MultipleCardsPerTurn(OriginalCards, &Temp) != 0 || MultipleColorsPerTurn(OriginalCards, &Temp) != 0){
-				sleep(1);
+				//sleep(1);
 				printf("You can play more than one card here again - would you like to? Type 1 for yes, type 0 for no: ");
 				Option = ValidateFTInput();
 				if(Option == 0){
