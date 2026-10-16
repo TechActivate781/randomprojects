@@ -18,7 +18,7 @@ for 1.00, add NO NEW FEATURES FOR THIS RELEASE. bugfix + tons of small rewrites 
 #include <string.h>
 #include <unistd.h>
 
-char Version[50] = "0.9 Release"; 
+char Version[50] = "0.9.1"; 
 bool StrategyInProgress = false; // this is for when we do a plus4, etc, after a reverse/skip. global variables do seem a bit illegal though, this may be fixed in the future.
 bool LogOrNot = false; // this is global so that LogErr() can use it needs to - otherwise LogOrNot would have to be passed to every function that could do an error 
 // sure am using too many global variables... feels illegal.
