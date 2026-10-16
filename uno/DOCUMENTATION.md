@@ -149,9 +149,9 @@ This function makes an attempt into analyzing the player's moves. It is passed `
 It is worth noting that this function does not include context - for instance, it is possible that the player was switching cards often because they were the only playable legal cards.
 
 This function can return a few values:
--If the player is frequently playing Plus 2/Plus 4 values, and we have a Plus 4/Change color, we have the value of 0.5
--This can be increased by 0.1 to 0.6 <ins>if the computer has more than ten cards</ins> (to get rid of the cards)
--If the player changed the current color often, a 1 is returned
+- If the player is frequently playing Plus 2/Plus 4 values, and we have a Plus 4/Change color, we have the value of 0.5
+- This can be increased by 0.1 to 0.6 <ins>if the computer has more than ten cards</ins> (to get rid of the cards)
+- If the player changed the current color often, a 1 is returned
 
 ## FixLastFew
 This function simply keeps the last three cards the player played. It gets rid of the fourth latest in favor of the latest and moves every card behind by one in the array of LastFewCards (often also called LastFourCards in the program; although it stores 3 cards in practice. It is called LastFourCards as the latest card is temporarily stored in the 4th element/3rd index prior to being moved back).
@@ -167,18 +167,18 @@ int NumOfAllCards[15] = {0};
 For either array, the format is the same; NumOfAllCards[12] would contain the number of Plus 2 cards that the computer has. A separate array stores the total number of 13/14 cards that the computer has. 
 
 Finally, the computer assigns a weight to each available card. The rules are as follows:
--If the card can't be legally played, a value of 119 is assigned
--If the color can be changed legally, +2 to the current value
--If the card can be changed legally, +2 to the current value
--If changing the color will allow an alignment to the strategy, another +1
--If the card is the last of its card, +2
--If the card is the last of its color, +3
--If there is only one card of the color we are changing the color to and there aren't any Plus 4/Change color, -5 (assuming its the color being changed)
--If there is only one card of the card we are changing the card to and there aren't any Plus 4/Change Color, -3 (assuming its the card being changed)
--If the value returned from ```AnalyzePlayer``` is 0.5 or 0.6, and we have a Reverse/Skip Turn is present, +5
--If the value returned from ```AnalyzePlayer``` is 0.5 or 0.6, but there aren't any Reverse/Skip Turn present, +3
--If the value returned from ```AnalyzePlayer``` is 0.6, +4
--If only one card can be played, that card has the value of 120
+- If the card can't be legally played, a value of 119 is assigned
+- If the color can be changed legally, +2 to the current value
+- If the card can be changed legally, +2 to the current value
+- If changing the color will allow an alignment to the strategy, another +1
+- If the card is the last of its card, +2
+- If the card is the last of its color, +3
+- If there is only one card of the color we are changing the color to and there aren't any Plus 4/Change color, -5 (assuming its the color being changed)
+- If there is only one card of the card we are changing the card to and there aren't any Plus 4/Change Color, -3 (assuming its the card being changed)
+- If the value returned from ```AnalyzePlayer``` is 0.5 or 0.6, and we have a Reverse/Skip Turn is present, +5
+- If the value returned from ```AnalyzePlayer``` is 0.5 or 0.6, but there aren't any Reverse/Skip Turn present, +3
+- If the value returned from ```AnalyzePlayer``` is 0.6, +4
+- If only one card can be played, that card has the value of 120
 
 ### Values returned
 The function can return many different values. A value of 100 returned means that a new card is needed, while a value of 122 means to start a strategy (this is returned if the ```int ColorOrCard``` argument passed to this function when called is 2). A value of 123 is returned if no playable cards are present (is this needed -- isn't 100 for that?) and a value of 10,000 is returned if starting a strategy is not possible.
