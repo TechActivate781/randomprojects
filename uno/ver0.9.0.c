@@ -1,3 +1,16 @@
+/*changelog:
+1. givecard() has been overhauled and now gives cards based on the probability in real uno
+2. logerr() has been added in case smth goes wrong
+3. player can now play two/more cards at once
+4. log made is now unoLog.txt to prevent accidentally overwriting/appending to an existing file.
+5. player v player has been removed temp, its honestly just a buggy mess and i'll readd it when it isn't complete and total garbage.
+6. computer turn is now decided by a set of rules, it sees what legal card scores the highest points and plays that.
+7. computer can play multiple cards at once
+8. one second breaks in between turns to slow things down and make the user keep up with it
+9. the card the computer plays is now clearly shown.
+10. here's something funny, this version marks the first time that a game finished. prior, it'd either get stuck or i'd have to quit because i'd end up with 20-30 cards. this no longer happens as computer/player can play more than one at once
+*/
+
 /* todo:
 reduce the whole point of main() - it's too large, put more things in different functions.
 
