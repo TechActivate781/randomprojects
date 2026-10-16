@@ -50,14 +50,14 @@ A log can also be made on-demand by typing 999 when asked to play a card _in the
 
 ## LogErr
 In the event of a serious error, the function ```LogErr``` will be asked to exit the app after informing the user about the error. If the user chose to log at the start of the game, an attempt will be made to write to said log; however, if unable to, details will be dumped on screen. A log entry will be made if possible, and if the user chose not to make a log, the following information will be dumped to the screen:
--The calling function
--The error code
--The reason for said error
+* The calling function
+* The error code
+* The reason for said error
 
 Currently, as of version 0.9.1, only 3 errors are implemented:
--Error 2 is given if dynamic memory allocation failed from ```TestHeuristic``` when checking what card the computer should play
--Error 3 is given if a card number was not given correctly, called from ```GiveCard```
--Error 4 is given if the card the computer chose to play was not a legal card. A plan has been made in future versions to phase this out and to instead try to give a card again
+- Error 2 is given if dynamic memory allocation failed from ```TestHeuristic``` when checking what card the computer should play
+- Error 3 is given if a card number was not given correctly, called from ```GiveCard```
+- Error 4 is given if the card the computer chose to play was not a legal card. A plan has been made in future versions to phase this out and to instead try to give a card again
 
 The application exits with error code 1 after either writing to the log or the terminal.
 
