@@ -21,6 +21,6 @@ A simple game of rock, paper, and scissors
 
 ### UNO
 A game of UNO. Although in development and current versions contain multiple bugs, the app is now functional and games may run okay.
-This is probably one of the best - if not the best - app that I've ever made.
+This is probably one of the best - if not the best - app that I've ever made. Documentation is below:
 
-Documentation is present [here](https://github.com/TechActivate781/randomprojects/blob/main/uno/DOCUMENTATION.md).
+```https://github.com/TechActivate781/randomprojects/blob/main/uno/DOCUMENTATION.md```
