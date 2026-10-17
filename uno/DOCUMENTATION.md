@@ -37,9 +37,11 @@ LastFewCards: 0 0   0 0   0 0
 ResultOfAnalyze: 0.00
 ```
 
-The initial part contains information about the app and various (hardcoded) sections talking about what is happening in the application.
+The initial section contains the version number, system date/time, and the detected operating system (this may fail and not have an output if not run on Linux, Windows, or FreeBSD). Keep in mind that the initial part of the long, where the game is being prepared, is (as of version 0.9.1) **hardcoded**. This means that if one of the operations listed fail, the log will still believe that they were successful. Do not rely on these for early debugging.
 
-### Anatomy of the log
+The later part of the log, where values are dumped, is shown below.
+
+### Second section
 Once the game is started, a typical log at a specific turn will contain various information about the turn. A dump of various variables are made; ```PlayerCards``` are simply what cards the player possesses. Each card has two values - the card number and the card color. The number is **always** the first detail shown. In the above log, the first card in ```Player.Card``` was "12 2". The number 12, in this case, simply means a +2. The number 2 is the color, which means it is a yellow card. More information about cards/colors is provided at the top.
 
 Additionally, values called "```Amounts```" are shown. This is the number of cards that are present in the array (as in the array storing the cards) for either the player or the computer. It is important to note that the first index is actually something like ```Player.Cards[0][0]```, so to access the 7th card's color, you would need something like ```Player.Cards[6][1]```.
@@ -101,7 +103,7 @@ This function accepts just about every variable. When the player/computer play a
 This function is incomplete.
 
 ## FixCardsOld
-This is the previous implementation of ```FixCards``` and thus accepts ```Cards[100][2]``` and an int called Amount. This is needed because if the card stored in the index of the array is played, it will become empty. This function moves all cards back by the amount needed to make sure the app runs correctly. I have to be honest, I myself am unsure about what it does - it is a massive mess and I wrote it in a hurry. However, it _does_ work.
+This is the previous implementation of ```FixCards``` and thus accepts ```Cards[100][2]``` and an int called Amount. This is needed because if the card stored in the index of the array is played, it will become empty. This function moves all cards back by the amount needed to make sure the app runs correctly. 
 
 ## MultipleCardsPerTurn
 This function simply accepts CurrentCard and a Hand. It then returns a non-zero value (the value is the number of cards that can be played at once that have the same card number) or a value of 0 if no other cards can be played at that moment that have the same card.
@@ -183,7 +185,7 @@ Finally, the computer assigns a weight to each available card. The rules are as 
 ### Values returned
 The function can return many different values. A value of 100 returned means that a new card is needed, while a value of 122 means to start a strategy (this is returned if the ```int ColorOrCard``` argument passed to this function when called is 2). A value of 123 is returned if no playable cards are present (is this needed -- isn't 100 for that?) and a value of 10,000 is returned if starting a strategy is not possible.
 
-When passing values to this function, the value passed for ```RequestedReturn``` chooses _how_ the value is returned. If it is a 1, then the <ins>card with the highest value is returned</ins> (internally called ```CardAnswer```). If it is a 0, then the <ins>value itself is returned</ins>. 
+When passing values to this function, the value passed for ```RequestedReturn``` chooses _how_ the value is returned. If it is a 1, then the <ins>card with the highest value is returned</ins> (internally called ```CardAnswer```). If it is a 0, then the <ins>value itself is returned</ins>. This can also be set to 2; when done, the function will only check whether or not a strategy is possible. If so, a value of 122 is returned. If a strategy can't be started, it returns a value of 10,000. 
 
 The ```ChooseComputerTurn``` function then uses this value as part of deciding what card to play.
 
